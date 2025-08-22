@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="description" content="A simple URL shortener app" />
+      <meta name="author" content="Mohit Bali" />
+      <title>URL Shortener</title>
+      <style>
+         *, *::before, *::after {
+         box-sizing: border-box;
+         }
+         body {
+         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+         background: linear-gradient(135deg, #f0f4ff, #e6f7ff);
+         margin: 0;
+         padding: 20px;
+         display: flex;
+         justify-content: center;  
+         align-items: center;       
+         min-height: 100vh;       
+         color: #333;
+         }
+         main {
+         background-color: #fff;
+         padding: 2rem 2.5rem;
+         border-radius: 12px;
+         box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+         max-width: 450px;
+         width: 100%;
+         animation: fadeIn 0.6s ease-in-out;
+         }
+         h1 {
+         margin-top: 0;
+         margin-bottom: 1.5rem;
+         font-weight: 700;
+         font-size: 1.9rem;
+         text-align: center;
+         color: #222;
+         }
+         form {
+         display: flex;
+         flex-direction: column;
+         gap: 1rem;
+         }
+         input[type="url"] {
+         padding: 0.8rem 1rem;
+         font-size: 1rem;
+         border: 1.5px solid #ccc;
+         border-radius: 8px;
+         transition: border-color 0.3s ease, box-shadow 0.3s ease;
+         }
+         input[type="url"]:focus {
+         border-color: #007BFF;
+         box-shadow: 0 0 5px rgba(0,123,255,0.3);
+         outline: none;
+         }
+         .btn-group {
+         display: flex;
+         gap: 10px;
+         }
+         button {
+         flex: 1;
+         padding: 0.75rem 1rem;
+         border: none;
+         color: white;
+         font-size: 1.05rem;
+         font-weight: 600;
+         border-radius: 8px;
+         cursor: pointer;
+         transition: transform 0.2s ease, background 0.3s ease;
+         }
+         button:active {
+         transform: scale(0.97);
+         }
+         .btn-primary {
+         background: linear-gradient(135deg, #007BFF, #0056b3);
+         }
+         .btn-primary:hover {
+         background: linear-gradient(135deg, #0056b3, #003f88);
+         }
+         .btn-reset {
+         background: #6c757d;
+         }
+         .btn-reset:hover {
+         background: #5a6268;
+         }
+         .result {
+         margin-top: 1.5rem;
+         font-size: 1.1rem;
+         text-align: center;
+         word-break: break-word;
+         padding: 0.8rem;
+         background: #f8f9fa;
+         border-radius: 6px;
+         }
+         .result a {
+         color: #007BFF;
+         text-decoration: none;
+         font-weight: 600;
+         }
+         .result a:hover {
+         text-decoration: underline;
+         }
+         .error {
+         color: #d9534f;
+         font-size: 0.9rem;
+         margin-top: -0.5rem;
+         text-align: left;
+         }
+         @keyframes fadeIn {
+         from { opacity: 0; transform: translateY(15px); }
+         to { opacity: 1; transform: translateY(0); }
+         }
+      </style>
+   </head>
+   <body>
+      <main>
+         <h1>URL Shortener</h1>
+         <form id="urlForm" method="POST" novalidate>
+            {% csrf_token %}
+            <input 
+               type="url" 
+               id="original_url" 
+               name="original_url" 
+               placeholder="Enter a valid URL (e.g. https://example.com)" 
+               required 
+               aria-label="URL to shorten" 
+               />
+            <p id="errorMessage" class="error" style="display:none;">⚠ Please enter a valid URL (must start with http/https).</p>
+            <div class="btn-group">
+               <button type="submit" class="btn-primary">Shorten</button>
+               <button type="button" class="btn-reset" onclick="window.location.href='/'">Reset</button>
+            </div>
+         </form>
+         {% if short_url %}
+         <p class="result">
+            Shortened URL: <a href="{{ short_url }}" target="_blank" rel="noopener noreferrer">{{ short_url }}</a>
+         </p>
+         {% endif %}
+      </main>
+      <script>
+         const form = document.getElementById("urlForm");
+         const urlInput = document.getElementById("original_url");
+         const errorMessage = document.getElementById("errorMessage");
+         
+         form.addEventListener("submit", function(event) {
+           const urlPattern = /^(https?:\/\/)[\w.-]+(\.[\w\.-]+)+[/#?]?.*$/;
+           if (!urlPattern.test(urlInput.value.trim())) {
+             event.preventDefault();
+             errorMessage.style.display = "block";
+             urlInput.style.borderColor = "#d9534f";
+           } else {
+             errorMessage.style.display = "none";
+             urlInput.style.borderColor = "#ccc";
+           }
+         });
+         
+         form.addEventListener("reset", function() {
+           errorMessage.style.display = "none";
+           urlInput.style.borderColor = "#ccc";
+         });
+      </script>
+   </body>
+</html>
