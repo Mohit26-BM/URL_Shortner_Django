@@ -20,14 +20,13 @@ This project is designed not only as a learning tool for Django beginners but al
 - **Error Handling:** Displays messages when a URL cannot be shortened (e.g., invalid URL format or API error).  
 - **Responsive UI:** The interface adapts to different screen sizes for better accessibility.  
 - **Simple & Minimal Design:** Clean, distraction-free layout to focus on the main task — shortening links.  
-- **Extendable Architecture:** The Django project is structured to allow further development (e.g., user accounts, custom short codes, analytics, etc.).
 
 ---
 
 ## 🛠️ Tech Stack
 
 - **Backend:**  
-  - Django 5.x as the main web framework  
+  - Django 5.2.4 as the main web framework  
   - Python 3.12 as the programming language  
   - Django’s built-in features for routing, forms, and template rendering  
 
