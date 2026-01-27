@@ -1,4 +1,4 @@
-# Django URL Shortener 🔗
+# Django URL Shortener 
 
 This is a **URL Shortener application** built using the Django web framework.  
 It allows users to input long, unwieldy URLs and quickly transform them into short, easy-to-share links.  
@@ -10,7 +10,7 @@ This project is designed not only as a learning tool for Django beginners but al
 
 ---
 
-## ✨ Features
+## Features
 
 - **URL Shortening:** Enter any valid URL and get a shortened version instantly.  
 - **Clickable Links:** The shortened link is clickable and opens in a new tab.  
@@ -23,7 +23,7 @@ This project is designed not only as a learning tool for Django beginners but al
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Backend:**  
   - Django 5.2.4 as the main web framework  
