@@ -6,15 +6,12 @@ It allows users to input long, unwieldy URLs and quickly transform them into sho
 The project integrates with the **Bitly API**, which is a popular and reliable service for link shortening.  
 On top of shortening, the app also focuses on a clean and minimal interface with a user-friendly workflow.
 
-This project is designed not only as a learning tool for Django beginners but also as a fully functional application that can be deployed for personal use or extended into a production-ready system.
-
 ---
 
 ## Features
 
 - **URL Shortening:** Enter any valid URL and get a shortened version instantly.  
 - **Clickable Links:** The shortened link is clickable and opens in a new tab.  
-- **Copy Functionality:** Easily copy the shortened link for sharing purposes.  
 - **Reset Button:** Quickly clear the form and result to start from scratch.  
 - **Form Validations:** Prevents empty or invalid URL submissions.  
 - **Error Handling:** Displays messages when a URL cannot be shortened (e.g., invalid URL format or API error).  
