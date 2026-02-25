@@ -4,163 +4,337 @@
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="description" content="A simple URL shortener app" />
+      <meta name="description" content="QuickLink - A fast Django URL shortener" />
       <meta name="author" content="Mohit Bali" />
-      <title>URL Shortener</title>
+      <title>QuickLink: Django URL Shortener</title>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
       <style>
-         *, *::before, *::after {
-         box-sizing: border-box;
+         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+         :root {
+           --bg: #0b0e1a;
+           --card: #12172b;
+           --border: #1e2640;
+           --accent: #4f8eff;
+           --accent2: #a78bfa;
+           --text: #e8ecf7;
+           --muted: #6b7498;
+           --success: #34d399;
+           --error: #f87171;
          }
+
          body {
-         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-         background: linear-gradient(135deg, #f0f4ff, #e6f7ff);
-         margin: 0;
-         padding: 20px;
-         display: flex;
-         justify-content: center;  
-         align-items: center;       
-         min-height: 100vh;       
-         color: #333;
+           font-family: 'Inter', sans-serif;
+           background: var(--bg);
+           color: var(--text);
+           min-height: 100vh;
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           justify-content: center;
+           padding: 2rem 1rem;
+           overflow-x: hidden;
          }
-         main {
-         background-color: #fff;
-         padding: 2rem 2.5rem;
-         border-radius: 12px;
-         box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-         max-width: 450px;
-         width: 100%;
-         animation: fadeIn 0.6s ease-in-out;
+
+         /* Ambient background blobs */
+         body::before, body::after {
+           content: '';
+           position: fixed;
+           border-radius: 50%;
+           filter: blur(90px);
+           pointer-events: none;
+           z-index: 0;
          }
+         body::before {
+           width: 400px; height: 400px;
+           background: radial-gradient(circle, rgba(79,142,255,0.15), transparent 70%);
+           top: -100px; left: -100px;
+         }
+         body::after {
+           width: 350px; height: 350px;
+           background: radial-gradient(circle, rgba(167,139,250,0.12), transparent 70%);
+           bottom: -80px; right: -80px;
+         }
+
+         .wrapper {
+           position: relative;
+           z-index: 1;
+           width: 100%;
+           max-width: 480px;
+           animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+         }
+
+         @keyframes rise {
+           from { opacity: 0; transform: translateY(28px); }
+           to   { opacity: 1; transform: translateY(0); }
+         }
+
+         /* Logo badge */
+         .logo-badge {
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           gap: 10px;
+           margin-bottom: 1.6rem;
+         }
+         .logo-icon {
+           width: 40px; height: 40px;
+           background: linear-gradient(135deg, var(--accent), var(--accent2));
+           border-radius: 10px;
+           display: flex; align-items: center; justify-content: center;
+           font-size: 1.2rem;
+           box-shadow: 0 0 20px rgba(79,142,255,0.35);
+         }
+         .logo-text {
+           font-family: 'Inter', sans-serif;
+           font-size: 1.1rem;
+           font-weight: 700;
+           letter-spacing: 0.04em;
+           color: var(--text);
+         }
+         .logo-text span { color: var(--accent); }
+
+         /* Card */
+         .card {
+           background: var(--card);
+           border: 1px solid var(--border);
+           border-radius: 18px;
+           padding: 2.2rem 2rem;
+           box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.03) inset;
+         }
+
          h1 {
-         margin-top: 0;
-         margin-bottom: 1.5rem;
-         font-weight: 700;
-         font-size: 1.9rem;
-         text-align: center;
-         color: #222;
+           font-family: 'Inter', sans-serif;
+           font-size: 1.75rem;
+           font-weight: 800;
+           line-height: 1.2;
+           margin-bottom: 0.4rem;
+           background: linear-gradient(135deg, #fff 30%, var(--accent2));
+           -webkit-background-clip: text;
+           -webkit-text-fill-color: transparent;
+           background-clip: text;
          }
-         form {
-         display: flex;
-         flex-direction: column;
-         gap: 1rem;
+
+         .subtitle {
+           font-size: 0.9rem;
+           color: var(--muted);
+           margin-bottom: 1.8rem;
+         }
+
+         /* Divider */
+         .divider {
+           height: 1px;
+           background: var(--border);
+           margin-bottom: 1.8rem;
+         }
+
+         /* Input */
+         .input-wrap {
+           position: relative;
+           margin-bottom: 1rem;
+         }
+         .input-icon {
+           position: absolute;
+           left: 14px;
+           top: 50%;
+           transform: translateY(-50%);
+           font-size: 1rem;
+           color: var(--muted);
+           pointer-events: none;
          }
          input[type="url"] {
-         padding: 0.8rem 1rem;
-         font-size: 1rem;
-         border: 1.5px solid #ccc;
-         border-radius: 8px;
-         transition: border-color 0.3s ease, box-shadow 0.3s ease;
+           width: 100%;
+           padding: 0.85rem 1rem 0.85rem 2.6rem;
+           font-size: 0.95rem;
+           font-family: 'DM Sans', sans-serif;
+           background: #0d1120;
+           border: 1.5px solid var(--border);
+           border-radius: 10px;
+           color: var(--text);
+           transition: border-color 0.25s, box-shadow 0.25s;
+           outline: none;
          }
+         input[type="url"]::placeholder { color: var(--muted); }
          input[type="url"]:focus {
-         border-color: #007BFF;
-         box-shadow: 0 0 5px rgba(0,123,255,0.3);
-         outline: none;
+           border-color: var(--accent);
+           box-shadow: 0 0 0 3px rgba(79,142,255,0.15);
          }
+         input[type="url"].invalid {
+           border-color: var(--error);
+           box-shadow: 0 0 0 3px rgba(248,113,113,0.15);
+         }
+
+         .error {
+           display: none;
+           color: var(--error);
+           font-size: 0.82rem;
+           margin-top: -0.5rem;
+           margin-bottom: 0.5rem;
+           padding-left: 4px;
+         }
+
+         /* Buttons */
          .btn-group {
-         display: flex;
-         gap: 10px;
+           display: flex;
+           gap: 10px;
          }
          button {
-         flex: 1;
-         padding: 0.75rem 1rem;
-         border: none;
-         color: white;
-         font-size: 1.05rem;
-         font-weight: 600;
-         border-radius: 8px;
-         cursor: pointer;
-         transition: transform 0.2s ease, background 0.3s ease;
+           flex: 1;
+           padding: 0.8rem 1rem;
+           border: none;
+           font-family: 'Inter', sans-serif;
+           font-size: 0.95rem;
+           font-weight: 500;
+           border-radius: 10px;
+           cursor: pointer;
+           transition: transform 0.15s, opacity 0.2s, box-shadow 0.2s;
          }
-         button:active {
-         transform: scale(0.97);
-         }
+         button:active { transform: scale(0.97); }
+
          .btn-primary {
-         background: linear-gradient(135deg, #007BFF, #0056b3);
+           background: linear-gradient(135deg, var(--accent), #3a6fd8);
+           color: #fff;
+           box-shadow: 0 4px 15px rgba(79,142,255,0.3);
          }
          .btn-primary:hover {
-         background: linear-gradient(135deg, #0056b3, #003f88);
+           opacity: 0.9;
+           box-shadow: 0 6px 20px rgba(79,142,255,0.45);
          }
          .btn-reset {
-         background: #6c757d;
+           background: transparent;
+           color: var(--muted);
+           border: 1.5px solid var(--border);
          }
-         .btn-reset:hover {
-         background: #5a6268;
-         }
+         .btn-reset:hover { color: var(--text); border-color: #2e3555; background: #1a1f35; }
+
+         /* Result box */
          .result {
-         margin-top: 1.5rem;
-         font-size: 1.1rem;
-         text-align: center;
-         word-break: break-word;
-         padding: 0.8rem;
-         background: #f8f9fa;
-         border-radius: 6px;
+           margin-top: 1.4rem;
+           display: flex;
+           align-items: center;
+           gap: 10px;
+           background: rgba(52,211,153,0.07);
+           border: 1px solid rgba(52,211,153,0.2);
+           border-radius: 10px;
+           padding: 0.9rem 1rem;
+           font-size: 0.9rem;
+           animation: popIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
          }
+         @keyframes popIn {
+           from { opacity: 0; transform: scale(0.95); }
+           to   { opacity: 1; transform: scale(1); }
+         }
+         .result-icon { font-size: 1.1rem; flex-shrink: 0; }
+         .result-content { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
+         .result-label { font-size: 0.75rem; color: var(--success); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; }
          .result a {
-         color: #007BFF;
-         text-decoration: none;
-         font-weight: 600;
+           color: #fff;
+           text-decoration: none;
+           font-weight: 500;
+           word-break: break-all;
          }
-         .result a:hover {
-         text-decoration: underline;
+         .result a:hover { color: var(--accent); text-decoration: underline; }
+
+         /* Copy button */
+         .btn-copy {
+           margin-left: auto;
+           flex: unset;
+           padding: 0.4rem 0.75rem;
+           font-size: 0.8rem;
+           border-radius: 7px;
+           background: rgba(79,142,255,0.15);
+           color: var(--accent);
+           border: 1px solid rgba(79,142,255,0.25);
+           cursor: pointer;
+           transition: background 0.2s;
+           white-space: nowrap;
          }
-         .error {
-         color: #d9534f;
-         font-size: 0.9rem;
-         margin-top: -0.5rem;
-         text-align: left;
-         }
-         @keyframes fadeIn {
-         from { opacity: 0; transform: translateY(15px); }
-         to { opacity: 1; transform: translateY(0); }
-         }
+         .btn-copy:hover { background: rgba(79,142,255,0.25); }
+
+
       </style>
    </head>
    <body>
-      <main>
-         <h1>URL Shortener</h1>
-         <form id="urlForm" method="POST" novalidate>
-            {% csrf_token %}
-            <input 
-               type="url" 
-               id="original_url" 
-               name="original_url" 
-               placeholder="Enter a valid URL (e.g. https://example.com)" 
-               required 
-               aria-label="URL to shorten" 
-               />
-            <p id="errorMessage" class="error" style="display:none;">⚠ Please enter a valid URL (must start with http/https).</p>
-            <div class="btn-group">
-               <button type="submit" class="btn-primary">Shorten</button>
-               <button type="button" class="btn-reset" onclick="window.location.href='/'">Reset</button>
+      <div class="wrapper">
+
+         <div class="logo-badge">
+            <div class="logo-icon">Q</div>
+            <div class="logo-text"><span>Quick</span>Link</div>
+         </div>
+
+         <div class="card">
+            <h1>QuickLink: Django URL Shortener</h1>
+            <p class="subtitle">Paste a long URL and get a short, shareable link instantly.</p>
+            <div class="divider"></div>
+
+            <form id="urlForm" method="POST" novalidate>
+               {% csrf_token %}
+               <div class="input-wrap">
+                  <span class="input-icon">#</span>
+                  <input
+                     type="url"
+                     id="original_url"
+                     name="original_url"
+                     placeholder="https://your-long-url.com/goes/here"
+                     required
+                     aria-label="URL to shorten"
+                  />
+               </div>
+         <p id="errorMessage" class="error">Please enter a valid URL starting with http:// or https://</p>
+               <div class="btn-group">
+                  <button type="submit" class="btn-primary">Shorten</button>
+                  <button type="button" class="btn-reset" onclick="window.location.href='/'">Reset</button>
+               </div>
+            </form>
+
+            {% if short_url %}
+            <div class="result" id="resultBox">
+               <span class="result-icon">+</span>
+               <div class="result-content">
+                  <span class="result-label">Shortened URL</span>
+                  <a href="{{ short_url }}" target="_blank" rel="noopener noreferrer" id="shortLink">{{ short_url }}</a>
+               </div>
+               <button class="btn-copy" onclick="copyLink()">Copy</button>
             </div>
-         </form>
-         {% if short_url %}
-         <p class="result">
-            Shortened URL: <a href="{{ short_url }}" target="_blank" rel="noopener noreferrer">{{ short_url }}</a>
-         </p>
-         {% endif %}
-      </main>
+            {% endif %}
+         </div>
+
+
+      </div>
+
       <script>
          const form = document.getElementById("urlForm");
          const urlInput = document.getElementById("original_url");
          const errorMessage = document.getElementById("errorMessage");
-         
-         form.addEventListener("submit", function(event) {
-           const urlPattern = /^(https?:\/\/)[\w.-]+(\.[\w\.-]+)+[/#?]?.*$/;
+         const urlPattern = /^(https?:\/\/)[\w.-]+(\.[\w\.-]+)+[/#?]?.*$/;
+
+         form.addEventListener("submit", function(e) {
            if (!urlPattern.test(urlInput.value.trim())) {
-             event.preventDefault();
+             e.preventDefault();
              errorMessage.style.display = "block";
-             urlInput.style.borderColor = "#d9534f";
+             urlInput.classList.add("invalid");
            } else {
              errorMessage.style.display = "none";
-             urlInput.style.borderColor = "#ccc";
+             urlInput.classList.remove("invalid");
            }
          });
-         
-         form.addEventListener("reset", function() {
-           errorMessage.style.display = "none";
-           urlInput.style.borderColor = "#ccc";
+
+         urlInput.addEventListener("input", function() {
+           if (urlPattern.test(urlInput.value.trim())) {
+             errorMessage.style.display = "none";
+             urlInput.classList.remove("invalid");
+           }
          });
+
+         function copyLink() {
+           const link = document.getElementById("shortLink");
+           if (!link) return;
+           navigator.clipboard.writeText(link.href).then(() => {
+             const btn = document.querySelector(".btn-copy");
+             btn.textContent = "Copied!";
+             setTimeout(() => btn.textContent = "Copy", 2000);
+           });
+         }
       </script>
    </body>
 </html>
