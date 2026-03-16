@@ -1,84 +1,164 @@
-# Django URL Shortener 
+# Django URL Shortener
 
-This is a **URL Shortener application** built using the Django web framework.  
-It allows users to input long, unwieldy URLs and quickly transform them into short, easy-to-share links.  
+A simple **URL Shortener web application** built with **Django**.
+It allows users to convert long URLs into short, shareable links through integration with the **Bitly API**.
 
-The project integrates with the **Bitly API**, which is a popular and reliable service for link shortening.  
-On top of shortening, the app also focuses on a clean and minimal interface with a user-friendly workflow.
-
----
-
-## Features
-
-- **URL Shortening:** Enter any valid URL and get a shortened version instantly.  
-- **Clickable Links:** The shortened link is clickable and opens in a new tab.  
-- **Reset Button:** Quickly clear the form and result to start from scratch.  
-- **Form Validations:** Prevents empty or invalid URL submissions.  
-- **Error Handling:** Displays messages when a URL cannot be shortened (e.g., invalid URL format or API error).  
-- **Responsive UI:** The interface adapts to different screen sizes for better accessibility.  
-- **Simple & Minimal Design:** Clean, distraction-free layout to focus on the main task — shortening links.  
+The application focuses on a **clean interface, smooth workflow, and strong validation**, making it easy for users to quickly shorten and share links.
 
 ---
 
-## Tech Stack
+# Features
 
-- **Backend:**  
-  - Django 5.2.4 as the main web framework  
-  - Python 3.12 as the programming language  
-  - Django’s built-in features for routing, forms, and template rendering  
+### URL Shortening
 
-- **Frontend:**  
-  - HTML5 for semantic structure  
-  - CSS3 for styling with a responsive design approach  
-  - Django Templates for dynamic content rendering  
+Enter any valid URL and instantly receive a shortened link.
 
-- **API Integration:**  
-  - **Bitly API** used to generate actual shortened links  
-  - Secure access token stored in environment variables  
+### Clickable Results
 
-- **Database:**  
-  - SQLite (default Django database) is used for local development  
-  - Can be swapped with PostgreSQL, MySQL, or any other supported database for production  
+Generated links are clickable and open in a new browser tab.
 
-- **Other Tools:**  
-  - `.env` for environment variable management (Django secret key, Bitly token, etc.)  
-  - `.gitignore` to exclude unnecessary files like `__pycache__`, migrations, and `db.sqlite3`  
-  - Git & GitHub for version control and project hosting
+### Reset Functionality
 
----
-## QA Testing
+Quickly clear the form and result to start a new shortening request.
 
-This project was manually tested against 21 test cases covering all major 
-features and edge cases.
+### Input Validation
 
-### Test Summary
-| Metric | Result |
-|---|---|
-| Total Test Cases | 21 |
-| Passed | 19 |
-| Failed | 2 |
-| Pass Rate | 90.4% |
-| Bugs Found | 2 |
+Prevents empty submissions and validates URL format before sending a request.
 
-### Areas Tested
-- URL Shortening (valid, invalid, empty, edge cases)
-- Clickable link behaviour (opens in new tab, correct redirect)
-- Reset button and form state management
-- Form validation (empty input, no scheme, special characters, XSS input)
-- Error handling and user-friendly messaging
-- Responsive UI at mobile (375px) and tablet (768px) breakpoints
-- Cross-browser testing — Chrome, Firefox, Edge
+### Error Handling
 
-### Bugs Found
-**BUG_001 — Silent failure on already-shortened URL [Medium]**  
-Pasting an existing Bitly link and clicking Shorten produces no output and 
-no error message — user gets zero feedback.
+Displays clear messages if the URL cannot be shortened due to:
 
-**BUG_002 — H1 rendering inconsistency in Firefox [Low]**  
-The h1 heading appears slightly brighter in Firefox compared to Chrome and 
-Edge, likely due to a CSS font-rendering difference.
+* invalid URL format
+* API errors
+* unexpected failures
 
-### Test Artifacts
-- Full test case sheet with results: [`test-cases/qa_test_cases.xlsx`](./test-cases/qa_test_cases.xlsx)
+### Responsive Interface
+
+Designed to adapt across screen sizes, improving usability on mobile and tablets.
+
+### Minimal UI
+
+A simple and distraction-free layout focused entirely on the core task: **shortening links quickly**.
 
 ---
+
+# Tech Stack
+
+## Backend
+
+* **Django 5.2.4** — web framework
+* **Python 3.12** — programming language
+* Django built-in tools for routing, forms, and template rendering
+
+## Frontend
+
+* **HTML5** — semantic markup
+* **CSS3** — responsive styling
+* **Django Templates** — dynamic rendering
+
+## API Integration
+
+* **Bitly API** — generates shortened URLs
+* Access token stored securely using **environment variables**
+
+## Database
+
+* **SQLite** (default Django database) for local development
+* Easily replaceable with:
+
+  * PostgreSQL
+  * MySQL
+  * other Django-supported databases for production
+
+## Development Tools
+
+* `.env` for environment variable management
+* `.gitignore` to exclude unnecessary files (`__pycache__`, database files, etc.)
+* **Git + GitHub** for version control and hosting
+
+---
+
+# QA Testing
+
+The project was **manually tested against 21 test cases** covering core functionality and edge cases.
+
+## Test Summary
+
+| Metric           | Result |
+| ---------------- | ------ |
+| Total Test Cases | 21     |
+| Passed           | 19     |
+| Failed           | 2      |
+| Pass Rate        | 90.4%  |
+| Bugs Found       | 2      |
+
+---
+
+## Areas Tested
+
+* URL shortening functionality
+
+  * valid URLs
+  * invalid URLs
+  * empty input
+  * edge cases
+
+* Link behaviour
+
+  * clickable result
+  * opens in a new tab
+  * correct redirect behaviour
+
+* Form functionality
+
+  * reset button
+  * form state management
+
+* Input validation
+
+  * empty fields
+  * missing URL scheme
+  * special characters
+  * potential XSS input
+
+* Error handling and user feedback
+
+* Responsive UI testing
+
+  * mobile breakpoint (375px)
+  * tablet breakpoint (768px)
+
+* Cross-browser testing
+
+  * Chrome
+  * Firefox
+  * Edge
+
+---
+
+# Bugs Found
+
+### BUG_001 — Silent failure on already-shortened URL
+
+**Severity:** Medium
+
+If a user pastes an existing Bitly link and clicks **Shorten**, the application returns no output and no error message, leaving the user without feedback.
+
+---
+
+### BUG_002 — H1 rendering inconsistency in Firefox
+
+**Severity:** Low
+
+The main `h1` heading appears slightly brighter in Firefox compared to Chrome and Edge, likely due to a font-rendering difference in CSS.
+
+---
+
+# Test Artifacts
+
+Full test case documentation:
+
+```
+test-cases/qa_test_cases.xlsx
+```
