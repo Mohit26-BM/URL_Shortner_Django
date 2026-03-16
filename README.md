@@ -1,6 +1,6 @@
 # Django URL Shortener
 
-🔗 **Live app:** [Here!](https://url-shortner-django-1.onrender.com/)
+**Live app:** [Here!](https://url-shortner-django-1.onrender.com/)
 
 A simple **URL Shortener web application** built with **Django**.
 It allows users to convert long URLs into short, shareable links through integration with the **Bitly API**.
@@ -156,6 +156,15 @@ If a user pastes an existing Bitly link and clicks **Shorten**, the application 
 The main `h1` heading appears slightly brighter in Firefox compared to Chrome and Edge, likely due to a font-rendering difference in CSS.
 
 ---
+
+# Observations
+
+### OBS_001 — API rate limit reached during testing
+**Severity:** Low (Observation)  
+During test execution, the Bitly free tier limit of 5 links per month 
+was reached. This is a third-party API constraint, not an application 
+bug. However, the app currently shows no user-friendly message when 
+the API limit is hit — it may silently fail or show a generic error.
 
 # Test Artifacts
 
