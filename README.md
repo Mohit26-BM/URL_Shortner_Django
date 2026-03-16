@@ -1,5 +1,7 @@
 # Django URL Shortener
 
+🔗 **Live app:** [your-render-url.onrender.com](https://your-render-url.onrender.com)
+
 A simple **URL Shortener web application** built with **Django**.
 It allows users to convert long URLs into short, shareable links through integration with the **Bitly API**.
 
@@ -162,3 +164,5 @@ Full test case documentation:
 ```
 test-cases/qa_test_cases.xlsx
 ```
+## Screenshots
+![Jira Bug Board](./screenshots/jira_board.png)
