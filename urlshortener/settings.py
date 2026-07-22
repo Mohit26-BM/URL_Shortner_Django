@@ -37,11 +37,12 @@ if not SECRET_KEY:
     raise ValueError("SECRET_KEY is not set")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = [
-    ".onrender.com",
-]
+if DEBUG:
+    ALLOWED_HOSTS = []
+else:
+    ALLOWED_HOSTS = [".onrender.com"]
 
 
 # Application definition
